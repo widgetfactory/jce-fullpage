@@ -38,11 +38,4 @@ class WFFullpagePlugin extends WFEditorPlugin {
         $tabs->addTab('meta');
         $tabs->addTab('appearance');
     }
-
-    function getSettings() {
-        $settings = array();
-
-        return json_encode($settings);
-    }
-
 }
