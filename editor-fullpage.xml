@@ -1,16 +1,16 @@
 <?xml version="1.0" ?>
 <extension version="2.5" type="plugin" group="jce" method="upgrade">
 	<name>PLG_JCE_EDITOR_FULLPAGE</name>
-	<version>2.1.5</version>
-	<creationDate>31 January 2015</creationDate>
-	<author>Moxiecode / Ryan Demmer</author>
-	<authorEmail>@@email@@</authorEmail>
+	<version>2.2.0</version>
+	<creationDate>June 2017</creationDate>
+	<author>Ryan Demmer</author>
+	<authorEmail>info@joomlacontenteditor.net</authorEmail>
 	<authorUrl>http://www.joomlacontenteditor.net/</authorUrl>
-	<copyright>Copyright (C) 2006 - 2015 Ryan Demmer. All rights reserved</copyright>
+	<copyright>Copyright (C) 2006 - 2017 Ryan Demmer. All rights reserved</copyright>
 	<license>GNU/GPL Version 2 - http://www.gnu.org/licenses/gpl-2.0.html</license>
 	<description>WF_FULLPAGE_DESC</description>
 	<icon>fullpage</icon>
-	<files>
+	<files folder="plugins/jce/editor-fullpage">
 		<file plugin="editor-fullpage">editor-fullpage.php</file>
 		<file>editor_plugin.js</file>
 		<folder>classes</folder>
@@ -77,7 +77,7 @@
 			<option value="us-ascii">us-ascii</option>
 		</param>
 	</params>
-	<languages>
+	<languages folder="administrator/language/en-GB">
 		<language tag="en-GB">en-GB.plg_jce_editor_fullpage.ini</language>
 		<language tag="en-GB">en-GB.plg_jce_editor_fullpage.sys.ini</language>
 	</languages>
