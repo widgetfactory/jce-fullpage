@@ -12,5 +12,5 @@ Click on the [Download Zip](https://github.com/widgetfactory/jce-fullpage/archiv
 
 ### Installation
 
-Install using the JCE Installer
+Install as a Joomla Plugin using the Joomla Extension Manager - https://docs.joomla.org/Installing_an_extension
 
