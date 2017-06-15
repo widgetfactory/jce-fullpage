@@ -12,11 +12,10 @@ defined('WF_EDITOR') or die('RESTRICTED');
 
 $tabs = WFTabs::getInstance();
 ?>
-<form onsubmit="return false;" name="fullpage">
-    <?php echo $tabs->render(); ?>
-
-    <div class="mceActionPanel">
-        <button type="button" onclick="FullPageDialog.update();" id="insert">{#update}</button>
-        <button type="button" id="cancel">{#cancel}</button>
-    </div>
+<form onsubmit="return false;" action="#">
+  	<?php $tabs->render(); ?>
+	<div class="mceActionPanel">
+		<button class="uk-button uk-button-primary" type="submit" id="insert" onclick="FullPageDialog.update();"><?php echo WFText::_('WF_LABEL_UPDATE'); ?></button>
+		<button class="uk-button" type="button" id="cancel"><?php echo WFText::_('WF_LABEL_CANCEL'); ?></button>
+	</div>
 </form>

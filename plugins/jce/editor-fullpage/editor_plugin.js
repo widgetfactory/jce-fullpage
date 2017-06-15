@@ -21,9 +21,9 @@
             // Register commands
             ed.addCommand('mceFullPageProperties', function () {
                 ed.windowManager.open({
-                    file: ed.getParam('site_url') + 'index.php?option=com_jce&view=editor&layout=plugin&plugin=fullpage',
+                    file: ed.getParam('site_url') + 'index.php?option=com_jce&view=editor&layout=plugin&plugin=editor-fullpage',
                     width: 430 + parseInt(ed.getLang('fullpage.delta_width', 0)),
-                    height: 510 + parseInt(ed.getLang('fullpage.delta_height', 0)),
+                    height: 550 + parseInt(ed.getLang('fullpage.delta_height', 0)),
                     inline: 1
                 }, {
                     plugin_url: url,
@@ -59,7 +59,6 @@
 
                 return value || '';
             }
-            ;
 
             // Default some values
             data.fontface = editor.getParam("fullpage_default_fontface", "");
@@ -127,7 +126,6 @@
             function setAttr(elm, name, value) {
                 elm.attr(name, value ? value : undefined);
             }
-            ;
 
             function addHeadNode(node) {
                 if (headElement.firstChild)
@@ -135,7 +133,6 @@
                 else
                     headElement.append(node);
             }
-            ;
 
             headerFragment = this._parseHeader();
             headElement = headerFragment.getAll('head')[0];
@@ -402,7 +399,6 @@
                 o.content = tinymce.trim(self.head) + '\n' + tinymce.trim(o.content) + '\n' + tinymce.trim(self.foot);
         }
     });
-
     // Register plugin
     tinymce.PluginManager.add('fullpage', tinymce.plugins.FullPagePlugin);
 })();

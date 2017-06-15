@@ -1,45 +1,45 @@
 <?php
 /**
- * @package   	JCE
- * @copyright 	Copyright © 2009-2015 Ryan Demmer. All rights reserved.
- * @license   	GNU/GPL 2 or later - http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * @package     JCE
+ * @copyright   Copyright © 2009-2015 Ryan Demmer. All rights reserved.
+ * @license     GNU/GPL 2 or later - http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  * JCE is free software. This version may have been modified pursuant
  * to the GNU General Public License, and as distributed it includes or
  * is derivative of works licensed under the GNU General Public License or
  * other free or open source software licenses.
  */
-class WFFullpagePluginConfig 
+class WFFullpagePluginConfig
 {
+    protected static $fonts = array('Andale Mono=andale mono,times', 'Arial=arial,helvetica,sans-serif', 'Arial Black=arial black,avant garde', 'Book Antiqua=book antiqua,palatino', 'Comic Sans MS=comic sans ms,sans-serif', 'Courier New=courier new,courier', 'Georgia=georgia,palatino', 'Helvetica=helvetica', 'Impact=impact,chicago', 'Symbol=symbol', 'Tahoma=tahoma,arial,helvetica,sans-serif', 'Terminal=terminal,monaco', 'Times New Roman=times new roman,times', 'Trebuchet MS=trebuchet ms,geneva', 'Verdana=verdana,geneva', 'Webdings=webdings', 'Wingdings=wingdings,zapf dingbats');
+
 	public static function getConfig(&$settings)
-	{
-		$wf 	= WFEditor::getInstance();
-		$model 	= JModel::getInstance('editor', 'WFModel');
-		
-		$doctypes = array(
-			'XHTML 1.0 Transitional' 	=> '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">',
-			'XHTML 1.0 Frameset' 		=> '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Frameset//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-frameset.dtd">',
-			'XHTML 1.0 Strict' 			=> '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">',
-			'XHTML 1.1' 				=> '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">',
-			'HTML 4.01 Transitional' 	=> '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">',
-			'HTML 4.01 Strict' 			=> '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">',
-			'HTML 4.01 Frameset' 		=> '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Frameset//EN" "http://www.w3.org/TR/html4/frameset.dtd">',
-			'HTML 5' 					=> '<!DOCTYPE HTML>'
-		);
-		
-		$doctype = $wf->getParam('fullpage.default_doctype', 'HTML 4.01 Transitional', 'HTML 4.01 Transitional');
-		
-		$settings['fullpage_fonts'] 				= $model->getEditorFonts();
-		$settings['fullpage_fontsizes'] 			= $wf->getParam('editor.theme_advanced_font_sizes', '8pt,10pt,12pt,14pt,18pt,24pt,36pt');		
-		$settings['fullpage_default_doctype'] 		= isset($doctypes[$doctype]) ? addslashes($doctypes[$doctype]) : '';
-		$settings['fullpage_hide_in_source_view']	= $wf->getParam('fullpage.hide_in_source_view', 0, 0);
-		$settings['fullpage_default_encoding']		= $wf->getParam('fullpage.default_encoding');
-		$settings['fullpage_default_xml_pi']		= $wf->getParam('fullpage.default_xml_pi', 0, 0);
-		$settings['fullpage_default_font_family'] 	= $wf->getParam('fullpage.default_font_family');
-		$settings['fullpage_default_title']			= $wf->getParam('fullpage.default_title', 'Untitled Document', 'Untitled Document');
-		$settings['fullpage_default_font_size']		= $wf->getParam('fullpage.default_font_size');
-		$settings['fullpage_default_text_color']	= $wf->getParam('fullpage.default_text_color');
-		
-		$model->removeKeys($settings['invalid_elements'], array('html', 'head', 'meta', 'title', 'body', 'link'));
-	}
+    {
+        $wf = WFEditor::getInstance();
+        
+        $doctypes = array(
+            'XHTML 1.0 Transitional'    => '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">',
+            'XHTML 1.0 Frameset'        => '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Frameset//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-frameset.dtd">',
+            'XHTML 1.0 Strict'          => '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">',
+            'XHTML 1.1'                 => '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">',
+            'HTML 4.01 Transitional'    => '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">',
+            'HTML 4.01 Strict'          => '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">',
+            'HTML 4.01 Frameset'        => '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Frameset//EN" "http://www.w3.org/TR/html4/frameset.dtd">',
+            'HTML 5'                    => '<!DOCTYPE HTML>'
+        );
+        
+        $doctype = $wf->getParam('fullpage.default_doctype', 'HTML 4.01 Transitional', 'HTML 4.01 Transitional');
+        
+        $settings['fullpage_fonts']                 = self::$fonts;
+        $settings['fullpage_fontsizes']             = $wf->getParam('editor.theme_advanced_font_sizes', '8pt,10pt,12pt,14pt,18pt,24pt,36pt');
+        $settings['fullpage_default_doctype']       = isset($doctypes[$doctype]) ? addslashes($doctypes[$doctype]) : '';
+        $settings['fullpage_hide_in_source_view']   = $wf->getParam('fullpage.hide_in_source_view', 0, 0);
+        $settings['fullpage_default_encoding']      = $wf->getParam('fullpage.default_encoding');
+        $settings['fullpage_default_xml_pi']        = $wf->getParam('fullpage.default_xml_pi', 0, 0);
+        $settings['fullpage_default_font_family']   = $wf->getParam('fullpage.default_font_family');
+        $settings['fullpage_default_title']         = $wf->getParam('fullpage.default_title', 'Untitled Document', 'Untitled Document');
+        $settings['fullpage_default_font_size']     = $wf->getParam('fullpage.default_font_size');
+        $settings['fullpage_default_text_color']    = $wf->getParam('fullpage.default_text_color');
+
+        $settings['invalid_elements'] = array_diff($settings['invalid_elements'], array('html', 'head', 'meta', 'title', 'body', 'link'));
+    }
 }
-?>
