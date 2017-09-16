@@ -1,6 +1,6 @@
 /**
  * @package   	JCE
- * @copyright 	Copyright © 2009-2015 Ryan Demmer. All rights reserved.
+ * @copyright 	Copyright © 2009-2017 Ryan Demmer. All rights reserved.
  * @license   	GNU/GPL 2 or later - http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  * JCE is free software. This version may have been modified pursuant
  * to the GNU General Public License, and as distributed it includes or
@@ -8,7 +8,7 @@
  * other free or open source software licenses.
  */
 
-(function ($) {
+(function ($, Wf) {
     var defaultDocTypes =
         'XHTML 1.0 Transitional=<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">,' +
         'XHTML 1.0 Frameset=<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Frameset//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-frameset.dtd">,' +
@@ -33,115 +33,193 @@
     var defaultFontNames = 'Arial=arial,helvetica,sans-serif;Courier New=courier new,courier,monospace;Georgia=georgia,times new roman,times,serif;Tahoma=tahoma,arial,helvetica,sans-serif;Times New Roman=times new roman,times,serif;Verdana=verdana,arial,helvetica,sans-serif;Impact=impact;WingDings=wingdings';
     var defaultFontSizes = '10px,11px,12px,13px,14px,15px,16px';
 
+    function convertRGBToHex(col) {
+        var re = new RegExp("rgb\\s*\\(\\s*([0-9]+).*,\\s*([0-9]+).*,\\s*([0-9]+).*\\)", "gi");
+
+        var rgb = col.replace(re, "$1,$2,$3").split(',');
+        if (rgb.length == 3) {
+            r = parseInt(rgb[0]).toString(16);
+            g = parseInt(rgb[1]).toString(16);
+            b = parseInt(rgb[2]).toString(16);
+
+            r = r.length == 1 ? '0' + r : r;
+            g = g.length == 1 ? '0' + g : g;
+            b = b.length == 1 ? '0' + b : b;
+
+            return "#" + r + g + b;
+        }
+
+        return col;
+    }
+
+    function convertHexToRGB(col) {
+        if (col.indexOf('#') != -1) {
+            col = col.replace(new RegExp('[^0-9A-F]', 'gi'), '');
+
+            r = parseInt(col.substring(0, 2), 16);
+            g = parseInt(col.substring(2, 4), 16);
+            b = parseInt(col.substring(4, 6), 16);
+
+            return "rgb(" + r + "," + g + "," + b + ")";
+        }
+
+        return col;
+    }
+
+    var attribsMap = {
+        "font-family": "font-family",
+        "font-size": "font-size",
+        "color": "color",
+        "background-image": "background-image",
+        "background-color": "background-color"
+    };
+
     var FullPageDialog = {
         settings: {},
-        changedStyle: function () {
-            var val, styles = tinyMCEPopup.editor.dom.parseStyle($('#style').val());
 
-            $('#fontface').val(styles['font-face']);
-            $('#fontsize').val(styles['font-size']);
-            $('#textcolor').val(styles['color']);
+        setStyles: function () {
+            var ed = tinyMCEPopup.editor;
+            // create proxy element to extract styles from
+            var $proxy = $('<div />'),
+                proxy = $proxy.get(0);
+            // update with table styles
+            $proxy.attr('style', $('#style').val());
 
-            if (val = styles['background-image']) {
-                $('#bgimage').val(val.replace(new RegExp("url\\('?([^']*)'?\\)", 'gi'), "$1"));
-            } else {
-                $('#bgimage').val('');
-            }
-            $('#bgcolor').val(styles['background-color']);
+            $.each(['background-image', 'background-color', 'color', 'font-size', 'font-family'], function (i, k) {
+                var v = ed.dom.getStyle(proxy, k);
 
-            // Reset margin form elements
-            $('#topmargin').val('');
-            $('#rightmargin').val('');
-            $('#bottommargin').val('');
-            $('#leftmargin').val('');
+                // delete all values
+                $proxy.css(k, "");
 
-            // Expand margin
-            if (val = styles['margin']) {
-                val = val.split(' ');
-                styles['margin-top'] = val[0] || '';
-                styles['margin-right'] = val[1] || val[0] || '';
-                styles['margin-bottom'] = val[2] || val[0] || '';
-                styles['margin-left'] = val[3] || val[0] || '';
-            }
+                if (k === "background-image" && v) {
+                    v = v.replace(new RegExp("url\\(['\"]?([^'\"]*)['\"]?\\)", 'gi'), "$1");
+                }
 
-            if (val = styles['margin-top']) {
-                $('#topmargin').val(val.replace(/px/, ''));
-            }
-            if (val = styles['margin-right']) {
-                $('#rightmargin').val(val.replace(/px/, ''));
-            }
-            if (val = styles['margin-bottom']) {
-                $('#bottommargin').val(val.replace(/px/, ''));
-            }
-            if (val = styles['margin-left']) {
-                $('#leftmargin').val(val.replace(/px/, ''));
-            }
-        },
-        changedStyleProp: function () {
-            var val, dom = tinyMCEPopup.editor.dom,
-                styles = dom.parseStyle($('#style').val());
+                if (k === "background-color" && v) {
+                    v = convertRGBToHex(v);
+                }
 
-            styles['font-face'] = $('#fontface').val();
-            styles['font-size'] = $('#fontsize').val();
-            styles['color'] = $('#textcolor').val();
-            styles['background-color'] = $('#bgcolor').val();
+                if (k === "color" && v) {
+                    v = convertRGBToHex(v);
+                }
 
-            if (val = $('#bgimage').val()) {
-                styles['background-image'] = "url('" + val + "')";
-            } else {
-                styles['background-image'] = '';
-            }
+                if (k === "font-family" && v) {
+                    v = v.toLowerCase();
+                }
 
-            delete styles['margin'];
+                // get mapped attribute name
+                k = attribsMap[k] || k;
 
-            if (val = $('#topmargin').val()) {
-                styles['margin-top'] = val + "px";
-            } else {
-                styles['margin-top'] = '';
-            }
-
-            if (val = $('#rightmargin').val()) {
-                styles['margin-right'] = val + "px";
-            } else {
-                styles['margin-right'] = '';
-            }
-
-            if (val = $('#bottommargin').val()) {
-                styles['margin-bottom'] = val + "px";
-            } else {
-                styles['margin-bottom'] = '';
-            }
-
-            if (val = $('#leftmargin').val()) {
-                styles['margin-left'] = val + "px";
-            } else {
-                styles['margin-left'] = '';
-            }
-
-            // Serialize, parse and reserialize this will compress redundant styles
-            $('#style').val(dom.serializeStyle(dom.parseStyle(dom.serializeStyle(styles))));
-            this.changedStyle();
-        },
-        update: function () {
-            var data = {};
-
-            tinymce.each(tinyMCEPopup.dom.select('select,input,textarea'), function (node) {
-                data[node.id] = $('#' + node.id).val();
+                // update form
+                $('#' + k).val(v).change();
             });
 
-            tinyMCEPopup.editor.plugins.fullpage._dataToHtml(data);
+            var styles = ed.dom.parseStyle($proxy.attr('style'));
+
+            // remove -moz and -webkit styles
+            for (k in styles) {
+                if (k.indexOf('-moz-') >= 0 || k.indexOf('-webkit-') >= 0) {
+                    delete styles[k];
+                }
+            }
+
+            // Merge
+            $('#style').val(ed.dom.serializeStyle(styles));
+        },
+
+        getStyles: function () {
+            var dom = tinyMCEPopup.editor.dom;
+
+            var style = $('#style').val();
+
+            var styles = {};
+
+            // values as styles
+            $.each(['background-image', 'background-color', 'color', 'font-size', 'font-family'], function (i, k) {
+                k = attribsMap[k] || k;
+
+                var v = $('#' + k).val();
+
+                if (k === "background-image") {
+                    if (v !== "") {
+                        v = 'url("' + v + '")';
+                    }
+                }
+
+                if (k === "background-color" && v) {
+                    if (v !== "") {
+                        v = v.charAt(0) === "#" ? v : '#' + v;
+                    }
+                }
+
+                if (k === "color" && v) {
+                    if (v !== "") {
+                        v = v.charAt(0) === "#" ? v : '#' + v;
+                    }
+                }
+
+                styles[k] = v;
+            });
+
+            // combine styles
+            style = dom.serializeStyle($.extend(dom.parseStyle(style), styles));
+            // serialize again to compress
+            style = dom.serializeStyle(dom.parseStyle(style));
+
+            return style;
+        },
+
+        update: function () {
+            var self = this,
+                data = {};
+
+            $('select,input,textarea').each(function () {
+                var value = $(this).val(),
+                    id = this.id;
+
+                // skip inline styles
+                if (attribsMap[id]) {
+                    return;
+                }
+
+                // update styles
+                if (id === "style") {
+                    value = self.getStyles();
+                }
+
+                if ($(this).is(':checkbox')) {
+                    value = !!$(this).prop('checked');
+                }
+
+                if ($(this).hasClass('color') && value.charAt(0) !== "#") {
+                    value = "#" + value;
+                }
+
+                data[this.id] = value;
+            });
+
+            if (data.stylesheets && typeof data.stylesheets === "string") {
+                data.stylesheets = [data.stylesheets];
+            }
+
+            tinyMCEPopup.editor.plugins.fullpage.dataToHtml(data);
             tinyMCEPopup.close();
         },
+
         init: function () {
-            var form = document.forms[0],
-                i, item, list, editor = tinyMCEPopup.editor;
+            var self = this,
+                item, list, editor = tinyMCEPopup.editor;
+
+            var doctypeMap = {};
 
             // Setup doctype select box
             list = editor.getParam("fullpage_doctypes", defaultDocTypes).split(',');
-            for (i = 0; i < list.length; i++) {
+
+            for (var i = 0; i < list.length; i++) {
                 item = list[i].split('=');
 
                 if (item.length > 1) {
+                    doctypeMap[item[1]] = item[0];
                     $('#doctype').append(new Option(item[0], item[1]));
                 }
             }
@@ -149,24 +227,25 @@
             // Setup fonts select box
             list = editor.getParam("theme_advanced_fonts", defaultFontNames).split(';');
 
-            for (i = 0; i < list.length; i++) {
+            for (var i = 0; i < list.length; i++) {
                 item = list[i].split('=');
 
                 if (item.length > 1) {
-                    $('#fontface').append(new Option(item[0], item[1]));
+                    $('#font-family').append(new Option(item[0], item[1]));
                 }
             }
 
             // Setup fontsize select box
             list = editor.getParam("fullpage_fontsizes", defaultFontSizes).split(',');
 
-            for (i = 0; i < list.length; i++) {                
-                $('#fontsize').append(new Option(list[i], list[i]));
+            for (var i = 0; i < list.length; i++) {
+                $('#font-size').append(new Option(list[i], list[i]));
             }
 
             // Setup encodings select box
             list = editor.getParam("fullpage_encodings", defaultEncodings).split(',');
-            for (i = 0; i < list.length; i++) {
+
+            for (var i = 0; i < list.length; i++) {
                 item = list[i].split('=');
 
                 if (item.length > 1) {
@@ -174,18 +253,38 @@
                 }
             }
 
+            $('#style').on('change', function () {
+                self.setStyles();
+            });
+
+            var data = tinyMCEPopup.getWindowArg('data');
+
             // Update form
-            tinymce.each(tinyMCEPopup.getWindowArg('data'), function (value, key) {
-                $('#' + key).val(value);
+            $.each(data, function (key, value) {
+                if ($('#' + key).is(':checkbox')) {
+                    $('#' + key).prop('checked', !!value).change();
+                } else {                    
+                    $('#' + key).val(function () {                        
+                        if (this.nodeName === "SELECT") {
+                            $('option', this).each(function () {                                
+                                if (value.toLowerCase() === this.value.toLowerCase()) {
+                                    value = this.value;
+
+                                    return true;
+                                }
+                            });
+                        }
+
+                        return value;
+                    }).change();
+                }
             });
 
             Wf.init();
-            
-            FullPageDialog.changedStyle();
         }
     };
 
     window.FullPageDialog = FullPageDialog;
 
     tinyMCEPopup.onInit.add(FullPageDialog.init, FullPageDialog);
-})(jQuery);
+})(jQuery, Wf);
