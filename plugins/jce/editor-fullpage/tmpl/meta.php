@@ -11,42 +11,42 @@
 defined('_JEXEC') or die('RESTRICTED');
 ?>
     <div class="uk-form-row">
-        <label class="uk-form-label uk-width-3-10" for="metatitle"><?php echo WFText::_('WF_FULLPAGE_META_TITLE'); ?></label>
+        <label class="uk-form-label uk-width-3-10" for="title"><?php echo WFText::_('WF_FULLPAGE_META_TITLE'); ?></label>
         <div class="uk-form-controls uk-width-7-10">
-            <input type="text" id="metatitle" name="metatitle" value="" />
+            <input type="text" id="title" value="" />
         </div>
     </div>
 
     <div class="uk-form-row">
-        <label class="uk-form-label uk-width-3-10" for="metakeywords"><?php echo WFText::_('WF_FULLPAGE_META_KEYWORDS'); ?></label>
+        <label class="uk-form-label uk-width-3-10" for="keywords"><?php echo WFText::_('WF_FULLPAGE_META_KEYWORDS'); ?></label>
         <div class="uk-form-controls uk-width-7-10">
-            <textarea id="metakeywords" name="metakeywords" rows="2"></textarea>
+            <textarea id="keywords" rows="2"></textarea>
         </div>
     </div>
 
     <div class="uk-form-row">
         <label class="uk-form-label uk-width-3-10" for="metadescription"><?php echo WFText::_('WF_FULLPAGE_META_DESCRIPTION'); ?></label>
         <div class="uk-form-controls uk-width-7-10">
-            <textarea id="metadescription" name="metadescription" rows="2"></textarea>
+            <textarea id="description" rows="2"></textarea>
         </div>
     </div>
 
     <div class="uk-form-row">
-        <label class="uk-form-label uk-width-3-10" for="metaauthor"><?php echo WFText::_('WF_FULLPAGE_AUTHOR'); ?></label>
-        <div class="uk-form-controls uk-width-7-10"><input type="text" id="metaauthor" name="metaauthor" value="" /></div>
+        <label class="uk-form-label uk-width-3-10" for="author"><?php echo WFText::_('WF_FULLPAGE_AUTHOR'); ?></label>
+        <div class="uk-form-controls uk-width-7-10"><input type="text" id="author" value="" /></div>
     </div>
 
     <div class="uk-form-row">
-        <label class="uk-form-label uk-width-3-10" for="metacopyright"><?php echo WFText::_('WF_FULLPAGE_COPYRIGHT'); ?></label>
+        <label class="uk-form-label uk-width-3-10" for="copyright"><?php echo WFText::_('WF_FULLPAGE_COPYRIGHT'); ?></label>
         <div class="uk-form-controls uk-width-7-10">
-            <input type="text" id="metacopyright" name="metacopyright" value="" />
+            <input type="text" id="copyright" value="" />
         </div>
     </div>
 
     <div class="uk-form-row">
-        <label class="uk-form-label uk-width-3-10" for="metarobots"><?php echo WFText::_('WF_FULLPAGE_META_ROBOTS'); ?></label>
+        <label class="uk-form-label uk-width-3-10" for="robots"><?php echo WFText::_('WF_FULLPAGE_META_ROBOTS'); ?></label>
         <div class="uk-form-controls uk-width-7-10">
-            <select id="metarobots" name="metarobots">
+            <select id="robots">
                     <option value=""><?php echo WFText::_('WF_OPTION_NOT_SET'); ?></option>
                     <option value="index,follow"><?php echo WFText::_('WF_FULLPAGE_META_INDEX_FOLLOW'); ?></option>
                     <option value="index,nofollow"><?php echo WFText::_('WF_FULLPAGE_META_INDEX_NOFOLLOW'); ?></option>
@@ -59,7 +59,7 @@ defined('_JEXEC') or die('RESTRICTED');
     <div class="uk-form-row">
         <label class="uk-form-label uk-width-3-10" for="docencoding"><?php echo WFText::_('WF_FULLPAGE_ENCODING'); ?></label>
         <div class="uk-form-controls uk-width-7-10">
-            <select id="docencoding" name="docencoding">
+            <select id="docencoding">
                     <option value=""><?php echo WFText::_('WF_OPTION_NOT_SET'); ?></option>
             </select>
         </div>
@@ -68,7 +68,7 @@ defined('_JEXEC') or die('RESTRICTED');
     <div class="uk-form-row">
         <label class="uk-form-label uk-width-3-10" for="doctype"><?php echo WFText::_('WF_FULLPAGE_DOCTYPES'); ?></label>
         <div class="uk-form-controls uk-width-7-10">
-            <select id="doctype" name="doctype">
+            <select id="doctype">
                 <option value=""><?php echo WFText::_('WF_OPTION_NOT_SET'); ?></option>
             </select>
         </div>
@@ -77,14 +77,14 @@ defined('_JEXEC') or die('RESTRICTED');
     <div class="uk-form-row">
         <label class="uk-form-label uk-width-3-10" for="langcode"><?php echo WFText::_('WF_FULLPAGE_LANGCODE'); ?></label>
         <div class="uk-form-controls uk-width-7-10">
-            <input type="text" id="langcode" name="langcode" value="" />
+            <input type="text" id="langcode" value="" />
         </div>
     </div>
 
     <div class="uk-form-row">
         <label class="uk-form-label uk-width-3-10" for="langdir"><?php echo WFText::_('WF_FULLPAGE_LANGDIR'); ?></label>
         <div class="uk-form-controls uk-width-7-10">
-            <select id="langdir" name="langdir">
+            <select id="langdir">
                 <option value=""><?php echo WFText::_('WF_OPTION_NOT_SET'); ?></option>
                 <option value="ltr"><?php echo WFText::_('WF_FULLPAGE_LTR'); ?></option>
                 <option value="rtl"><?php echo WFText::_('WF_FULLPAGE_RTL'); ?></option>
@@ -95,6 +95,6 @@ defined('_JEXEC') or die('RESTRICTED');
     <div class="uk-form-row">
         <label class="uk-form-label uk-width-3-10" for="xml_pi"><?php echo WFText::_('WF_FULLPAGE_XML_PI'); ?></label>
         <div class="uk-form-controls uk-width-7-10">
-            <input type="checkbox" id="xml_pi" name="xml_pi" class="checkbox" />
+            <input type="checkbox" id="xml_pi" class="checkbox" />
         </div>
     </div>
